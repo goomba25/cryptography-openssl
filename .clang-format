@@ -1,0 +1,33 @@
+BasedOnStyle: Google
+---
+Language: Cpp
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: false
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: false
+AlignArrayOfStructures: Right
+AllowShortEnumsOnASingleLine: false
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterNamespace: true
+  AfterFunction: true
+  AfterControlStatement: true
+  BeforeWhile: true
+  BeforeElse: true
+  BeforeCatch: true
+BinPackArguments: true
+BinPackParameters: false
+IncludeCategories:
+  - Regex: '^<.*\.h>'
+    Priority: 0
+  - Regex: ".*"
+    Priority: 1
+IndentCaseLabels: false
+IndentWidth: "4"
+ColumnLimit: 100
