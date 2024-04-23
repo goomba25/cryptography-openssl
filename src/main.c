@@ -1,4 +1,5 @@
 #include "common.h"
+#include "test_ecdh.h"
 #include "test_hash.h"
 
 #define MSG                                                                                        \
@@ -8,17 +9,27 @@
 
 int main()
 {
-    uint32_t result  = SUCCESS;
+    uint32_t result                    = SUCCESS;
 
-    uint32_t hashLen = 0U;
-    uint8_t *hashDst = {
+    uint32_t hashLen                   = 0U;
+    uint8_t hashDst[SHA_DIGEST_LENGTH] = {
         0U,
     };
+
+    OPENSSL_init();
+    OpenSSL_add_all_algorithms();
 
     result = test_hash(MSG, strlen(MSG), hashDst, SHA_DIGEST_LENGTH);
     if (result != SUCCESS)
     {
         printf("failed to test_hash\n");
+        goto exit;
+    }
+
+    result = test_ecdh_P192();
+    if (result != SUCCESS)
+    {
+        printf("failed to test_ecdh_P192\n");
     }
 
 exit:

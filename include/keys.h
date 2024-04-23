@@ -4,8 +4,7 @@
 #define KEYS_H
 
 #include "common.h"
-
-uint32_t ssl_CreateECKey();
+EC_KEY *ssl_CreateECKey(KEY_TYPE type, EC_CURVE curve, BIGNUM *qx, BIGNUM *qy, BIGNUM *d);
 uint32_t ssl_CreateDSAKey();
 
 #endif /* KEYS_H */

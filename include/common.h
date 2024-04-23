@@ -19,6 +19,7 @@
 #define SUCCESS       0U
 #define FAILURE       1U
 #define NOT_SUPPORTED 2U
+#define BAD_PARAMETER 3U
 
 #define trace()                                                                        \
     do                                                                                 \
@@ -26,6 +27,15 @@
         printf("%sTRACE%s %s:%d\n", COLOR_GREEN, COLOR_RESET, __FUNCTION__, __LINE__); \
     }                                                                                  \
     while (0)
+
+#define CHECK(x)                                                                                  \
+    uint32_t retval = (x);                                                                        \
+    if (retval != SUCCESS)                                                                        \
+    {                                                                                             \
+        printf("%s%s%s:%d '%s' : 0x%08X \n ", COLOR_RED, __FUNCTION__, COLOR_RESET, __LINE__, #x, \
+               retval);                                                                           \
+        goto exit;                                                                                \
+    }
 
 #define HEXDUMP(B, L)                                                         \
     ({                                                                        \
@@ -53,6 +63,21 @@ typedef struct {
     uint8_t data[4096U];
 } OBJECT_DATA;
 
+typedef enum {
+    TYPE_KEY_PAIR,
+    TYPE_PRIVATE_KEY,
+    TYPE_PUBLIC_KEY,
+} KEY_TYPE;
+
+typedef enum {
+    P192,
+    P224,
+    P256,
+    P384,
+    P521
+} EC_CURVE;
+
 size_t HexStr2Byte(char *hex, char *out);
+BIGNUM *Bn2Hex(char *hex);
 
 #endif /* COMMON_H */

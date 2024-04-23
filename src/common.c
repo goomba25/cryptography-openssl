@@ -4,7 +4,7 @@ size_t HexStr2Byte(char *hex, char *out)
 {
     size_t outLength = -1;
     size_t hexStr_sz = 0;
-    size_t index = 0;
+    size_t index     = 0;
     char c;
     char val = 0;
 
@@ -21,7 +21,7 @@ size_t HexStr2Byte(char *hex, char *out)
     }
     for (size_t i = 0; i < hexStr_sz; i++)
     {
-        c = hex[i];
+        c   = hex[i];
         val = 0;
         if (c >= '0' && c <= '9')
         {
@@ -46,4 +46,27 @@ size_t HexStr2Byte(char *hex, char *out)
     }
 
     return outLength;
+}
+
+BIGNUM *Bn2Hex(char *hex)
+{
+    uint32_t result     = SUCCESS;
+    uint8_t data[4096U] = {
+        0U,
+    };
+    uint32_t dataLen = 0U;
+    BIGNUM *out      = NULL;
+
+    if (hex == NULL)
+    {
+        result = BAD_PARAMETER;
+        goto exit;
+    }
+
+    dataLen = HexStr2Byte(hex, (char *)data);
+
+    out     = BN_bin2bn(data, dataLen, NULL);
+
+exit:
+    return out;
 }
