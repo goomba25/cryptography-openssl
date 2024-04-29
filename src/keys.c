@@ -119,10 +119,54 @@ exit:
     return key;
 }
 
-uint32_t ssl_CreateDSAKey()
+DSA *ssl_CreateDSAKey(KEY_TYPE type, BIGNUM *p, BIGNUM *q, BIGNUM *g, BIGNUM *x, BIGNUM *y)
 {
-    uint32_t result = SUCCESS;
+    uint32_t result    = SUCCESS;
+    DSA *key           = NULL;
+
+    uint8_t *keyBuffer = NULL;
+    uint32_t keyLength = 0U;
+    uint32_t bitLength = 0U;
+
+    trace();
+
+    key       = DSA_new();
+    bitLength = BN_num_bits(p);
+
+    DSA_generate_parameters_ex(key, bitLength, NULL, 0, NULL, NULL, NULL);
+    DSA_generate_key(key);
+
+    if (!DSA_set0_pqg(key, p, q, g))
+    {
+        printf("pqg error\n");
+        result = FAILURE;
+        goto exit;
+    }
+
+    if (!DSA_set0_key(key, y, x))
+    {
+        printf("pp error\n");
+        result = FAILURE;
+        goto exit;
+    }
+
+    if (type == TYPE_PUBLIC_KEY)
+    {
+        keyLength = i2d_DSAPublicKey(key, &keyBuffer);
+        printf("\n=================== PUBLIC KEY ===================\n");
+        HEXDUMP(keyBuffer, keyLength);
+    }
+    else
+    {
+        keyLength = i2d_DSAPrivateKey(key, &keyBuffer);
+        printf("\n=================== PRIVATE KEY ===================\n");
+        HEXDUMP(keyBuffer, keyLength);
+    }
 
 exit:
-    return result;
+    if (keyBuffer != NULL)
+    {
+        free(keyBuffer);
+    }
+    return key;
 }

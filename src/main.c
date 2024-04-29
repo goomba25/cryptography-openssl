@@ -1,4 +1,5 @@
 #include "common.h"
+#include "test_dsa.h"
 #include "test_ecdh.h"
 #include "test_hash.h"
 
@@ -11,7 +12,6 @@ int main()
 {
     uint32_t result                    = SUCCESS;
 
-    uint32_t hashLen                   = 0U;
     uint8_t hashDst[SHA_DIGEST_LENGTH] = {
         0U,
     };
@@ -30,6 +30,18 @@ int main()
     if (result != SUCCESS)
     {
         printf("failed to test_ecdh_P192\n");
+    }
+
+    result = test_dsa_sha1_sign();
+    if (result != SUCCESS)
+    {
+        printf("failed to test_dsa_sha1_sign\n");
+    }
+
+    result = test_dsa_sha1_verify();
+    if (result != SUCCESS)
+    {
+        printf("failed to test_dsa_sha1_verify\n");
     }
 
 exit:
